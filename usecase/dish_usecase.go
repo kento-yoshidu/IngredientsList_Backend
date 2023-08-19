@@ -3,6 +3,7 @@ package usecase
 import (
 	"ingredients-list/model"
 	"ingredients-list/repository"
+	"ingredients-list/validator"
 )
 
 type IDishUsecase interface {
@@ -14,10 +15,11 @@ type IDishUsecase interface {
 
 type dishUsecase struct {
 	dr repository.IDishRepository
+	dv validator.IDishValidator
 }
 
-func NewDishUsecase(dr repository.IDishRepository) IDishUsecase {
-	return &dishUsecase{dr}
+func NewDishUsecase(dr repository.IDishRepository, dv validator.IDishValidator) IDishUsecase {
+	return &dishUsecase{dr, dv}
 }
 
 func (du *dishUsecase) GetAllDishes(userId uint) ([]model.DishResponse, error) {
@@ -57,6 +59,9 @@ func (du *dishUsecase) GetDishById(userId, dishId uint) (model.DishResponse, err
 }
 
 func (du *dishUsecase) CreateDish(dish model.Dish) (model.DishResponse, error) {
+	if err := du.dv.DishValidate(dish); err != nil {
+		return model.DishResponse{}, err
+	}
 	if err := du.dr.CreateDish(&dish); err != nil {
 		return model.DishResponse{}, err
 	}
