@@ -35,14 +35,14 @@ func (uu *userUsecase) SignUp(user model.User) (model.UserResponse, error) {
 		return model.UserResponse{}, err
 	}
 
-	newUser := model.User{UserName: user.UserName, Password: string(hash)}
+	newUser := model.User{Username: user.Username, Password: string(hash)}
 	if err := uu.ur.CreateUser(&newUser); err != nil {
 		return model.UserResponse{}, err
 	}
 
 	resUser := model.UserResponse{
 		ID:       newUser.ID,
-		UserName: newUser.UserName,
+		Username: newUser.Username,
 	}
 
 	return resUser, nil
@@ -55,7 +55,7 @@ func (uu *userUsecase) LogIn(user model.User) (string, error) {
 
 	// ユーザーがDB内に存在するか
 	storedUser := model.User{}
-	if err := uu.ur.GetUserByUsername(&storedUser, user.UserName); err != nil {
+	if err := uu.ur.GetUserByUsername(&storedUser, user.Username); err != nil {
 		return "", err
 	}
 

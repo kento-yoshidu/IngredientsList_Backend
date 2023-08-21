@@ -20,9 +20,9 @@ func NewUserValidator() IUserValidator {
 func (uv *userValidator) UserValidate(user model.User) error {
 	return validation.ValidateStruct(&user,
 		validation.Field(
-			&user.UserName,
-			validation.Required.Error("UserName is required."),
-			is.Alphanumeric.Error("UserName is alpha or num only"),
+			&user.Username,
+			validation.Required.Error("Username is required."),
+			is.Alphanumeric.Error("Username is alpha or num only"),
 		),
 		validation.Field(
 			&user.Password,
