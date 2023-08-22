@@ -19,7 +19,7 @@ func NewDishValidator() IDishValidator {
 func (dv *dishValidator) DishValidate(dish model.Dish) error {
 	return validation.ValidateStruct(&dish,
 		validation.Field(
-			&dish.DishName,
+			&dish.Dishname,
 			validation.Required.Error("DishName is required."),
 		),
 	)
