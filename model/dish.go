@@ -4,7 +4,7 @@ import "time"
 
 type Dish struct {
 	ID        uint      `json:"id" gorm:"primaryKey"`
-	DishName  string    `json:"dish_name" gorm:"not null"`
+	Dishname  string    `json:"dishname" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	UserId    uint      `json:"user_id" gorm:"not null"`
@@ -13,7 +13,7 @@ type Dish struct {
 
 type DishResponse struct {
 	ID        uint      `json:"id" gorm:"primaryKey"`
-	DishName  string    `json:"dish_name" gorm:"not null"`
+	Dishname  string    `json:"dishname" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

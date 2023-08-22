@@ -4,7 +4,7 @@ import "time"
 
 type Ingredient struct {
 	ID             uint      `json:"id" gorm:"primaryKey"`
-	IngredientName string    `json:"ingredient_name" gorm:"not null"`
+	Ingredientname string    `json:"ingredientname" gorm:"not null"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 	Stock          bool      `json:"stock" gorm:"not null"`
@@ -14,7 +14,7 @@ type Ingredient struct {
 
 type IngredientResponse struct {
 	ID             uint      `json:"id" gorm:"primaryKey"`
-	IngredientName string    `json:"ingredient_name" gorm:"not null"`
+	Ingredientname string    `json:"ingredientname" gorm:"not null"`
 	Stock          bool      `json:"stock" gorm:"not null"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
