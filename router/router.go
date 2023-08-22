@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func NewRouter(uc controller.IUserController, dc controller.IDishController) *echo.Echo {
+func NewRouter(uc controller.IUserController, dc controller.IDishController, ic controller.IIngredientController) *echo.Echo {
 	e := echo.New()
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -43,6 +43,14 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController) *ec
 	d.GET("/:dishId", dc.GetDishById)
 	d.POST("", dc.CreateDish)
 	d.DELETE("/:dishId", dc.DeleteDish)
+
+	i := e.Group("/ingredients")
+	i.Use(echojwt.WithConfig(echojwt.Config{
+		SigningKey:  []byte(os.Getenv("SECRET")),
+		TokenLookup: "cookie:token",
+	}))
+
+	i.GET("/:dishId", ic.GetAllIngredients)
 
 	return e
 }
