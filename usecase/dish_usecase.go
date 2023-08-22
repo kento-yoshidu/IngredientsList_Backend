@@ -32,7 +32,7 @@ func (du *dishUsecase) GetAllDishes(userId uint) ([]model.DishResponse, error) {
 	for _, v := range dishes {
 		dish := model.DishResponse{
 			ID:        v.ID,
-			DishName:  v.DishName,
+			Dishname:  v.Dishname,
 			CreatedAt: v.CreatedAt,
 			UpdatedAt: v.UpdatedAt,
 		}
@@ -50,7 +50,7 @@ func (du *dishUsecase) GetDishById(userId, dishId uint) (model.DishResponse, err
 
 	resDish := model.DishResponse{
 		ID:        dish.ID,
-		DishName:  dish.DishName,
+		Dishname:  dish.Dishname,
 		CreatedAt: dish.CreatedAt,
 		UpdatedAt: dish.UpdatedAt,
 	}
@@ -68,7 +68,7 @@ func (du *dishUsecase) CreateDish(dish model.Dish) (model.DishResponse, error) {
 
 	resDish := model.DishResponse{
 		ID:        dish.ID,
-		DishName:  dish.DishName,
+		Dishname:  dish.Dishname,
 		CreatedAt: dish.CreatedAt,
 		UpdatedAt: dish.UpdatedAt,
 	}
