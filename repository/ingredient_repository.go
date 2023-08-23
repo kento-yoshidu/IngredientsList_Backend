@@ -9,8 +9,8 @@ import (
 )
 
 type IIngredientRepository interface {
-	GetAllIngredients(ingredients *[]model.Ingredient, dishId uint) error
-	GetIngredientByDishId(ingredient *model.Ingredient, dishId, ingredientId uint) error
+	// GetAllIngredients(ingredients *[]model.Ingredient, dishId uint) error
+	GetIngredientsByDishId(ingredient *[]model.Ingredient, userId, dishId uint) error
 	CreateIngredient(ingredient *model.Ingredient) error
 	UpdateIngredient(ingredient *model.Ingredient, dishId, ingredientId uint) error
 	DeleteIngredient(dishId, ingredientId uint) error
@@ -24,16 +24,8 @@ func NewIngredientRepository(db *gorm.DB) IIngredientRepository {
 	return &ingredientRepository{db}
 }
 
-func (ir *ingredientRepository) GetAllIngredients(ingredients *[]model.Ingredient, dishId uint) error {
-	if err := ir.db.Joins("Dish").Where("dish_id=?", dishId).Order("created_at").Find(ingredients).Error; err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (ir *ingredientRepository) GetIngredientByDishId(ingredient *model.Ingredient, dishId, ingredientId uint) error {
-	if err := ir.db.Joins("Dish").Where("dish_id=?", dishId).First(ingredient, ingredientId).Error; err != nil {
+func (ir *ingredientRepository) GetIngredientsByDishId(ingredient *[]model.Ingredient, userId, dishId uint) error {
+	if err := ir.db.Joins("Dish").Where("user_id=? AND dish_id=?", userId, dishId).Find(ingredient).Error; err != nil {
 		return err
 	}
 
@@ -75,3 +67,13 @@ func (ir *ingredientRepository) DeleteIngredient(dishId, ingredientId uint) erro
 
 	return nil
 }
+
+/*
+func (ir *ingredientRepository) GetAllIngredients(ingredients *[]model.Ingredient, dishId uint) error {
+	if err := ir.db.Joins("Dish").Where("dish_id=?", dishId).Order("created_at").Find(ingredients).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+*/
