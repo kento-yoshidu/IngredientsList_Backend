@@ -44,13 +44,17 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 	d.POST("", dc.CreateDish)
 	d.DELETE("/:dishId", dc.DeleteDish)
 
-	i := e.Group("/ingredients")
-	i.Use(echojwt.WithConfig(echojwt.Config{
-		SigningKey:  []byte(os.Getenv("SECRET")),
-		TokenLookup: "cookie:token",
-	}))
+	d.GET("/:dishId/ingredients", ic.GetIngredientsByDishId)
 
-	i.GET("/:dishId", ic.GetAllIngredients)
+	/*
+		i := e.Group("/ingredients")
+		i.Use(echojwt.WithConfig(echojwt.Config{
+			SigningKey:  []byte(os.Getenv("SECRET")),
+			TokenLookup: "cookie:token",
+		}))
+
+		i.GET("/:dishId", ic.GetIngredientsByDishId)
+	*/
 
 	return e
 }

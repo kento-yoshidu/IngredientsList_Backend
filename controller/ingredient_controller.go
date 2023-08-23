@@ -1,17 +1,18 @@
 package controller
 
 import (
-	"fmt"
 	"ingredients-list/usecase"
 	"net/http"
 	"strconv"
 
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
 )
 
 type IIngredientController interface {
-	GetAllIngredients(c echo.Context) error
+	// GetAllIngredients(c echo.Context) error
 	// CreateIngredient(c echo.Context) error
+	GetIngredientsByDishId(c echo.Context) error
 }
 
 type ingredientController struct {
@@ -22,6 +23,22 @@ func NewIngredientController(iu usecase.IIngredientUsecase) IIngredientControlle
 	return &ingredientController{iu}
 }
 
+func (ic *ingredientController) GetIngredientsByDishId(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userId := claims["user_id"]
+	id := c.Param("dishId")
+
+	dishId, _ := strconv.Atoi(id)
+	ingredientsRes, err := ic.iu.GetIngredientsByDishId(uint(userId.(float64)), uint(dishId))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, ingredientsRes)
+}
+
+/*
 func (ic *ingredientController) GetAllIngredients(c echo.Context) error {
 
 	// user := c.Get("user").(*jwt.Token)
