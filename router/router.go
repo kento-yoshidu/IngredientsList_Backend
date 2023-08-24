@@ -38,11 +38,12 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 		SigningKey:  []byte(os.Getenv("SECRET")),
 		TokenLookup: "cookie:token",
 	}))
-	dish.GET("/:dishId", dc.GetDishById)
 	dish.POST("", dc.CreateDish)
+	dish.GET("/:dishId", dc.GetDishById)
 	dish.DELETE("/:dishId", dc.DeleteDish)
+
 	dish.GET("/:dishId/ingredients", ic.GetIngredientsByDishId)
-	// dish.POST("/:dishId/ingredients", ic.CreateIngredient)
+	dish.POST("/:dishId/ingredients", ic.CreateIngredient)
 
 	dishes := e.Group("/dishes")
 	dishes.Use(echojwt.WithConfig(echojwt.Config{
