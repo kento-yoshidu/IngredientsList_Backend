@@ -9,7 +9,6 @@ import (
 )
 
 type IIngredientRepository interface {
-	// GetAllIngredients(ingredients *[]model.Ingredient, dishId uint) error
 	GetIngredientsByDishId(ingredient *[]model.Ingredient, userId, dishId uint) error
 	CreateIngredient(ingredient *model.Ingredient) error
 	UpdateIngredient(ingredient *model.Ingredient, dishId, ingredientId uint) error
@@ -67,13 +66,3 @@ func (ir *ingredientRepository) DeleteIngredient(dishId, ingredientId uint) erro
 
 	return nil
 }
-
-/*
-func (ir *ingredientRepository) GetAllIngredients(ingredients *[]model.Ingredient, dishId uint) error {
-	if err := ir.db.Joins("Dish").Where("dish_id=?", dishId).Order("created_at").Find(ingredients).Error; err != nil {
-		return err
-	}
-
-	return nil
-}
-*/
