@@ -33,28 +33,23 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 	e.POST("/logout", uc.LogOut)
 	e.GET("/csrf", uc.CsrfToken)
 
-	d := e.Group("/dishes")
-	d.Use(echojwt.WithConfig(echojwt.Config{
+	dish := e.Group("/dish")
+	dish.Use(echojwt.WithConfig(echojwt.Config{
 		SigningKey:  []byte(os.Getenv("SECRET")),
 		TokenLookup: "cookie:token",
 	}))
+	dish.GET("/:dishId", dc.GetDishById)
+	dish.POST("", dc.CreateDish)
+	dish.DELETE("/:dishId", dc.DeleteDish)
+	dish.GET("/:dishId/ingredients", ic.GetIngredientsByDishId)
+	// dish.POST("/:dishId/ingredients", ic.CreateIngredient)
 
-	d.GET("", dc.GetAllDishes)
-	d.GET("/:dishId", dc.GetDishById)
-	d.POST("", dc.CreateDish)
-	d.DELETE("/:dishId", dc.DeleteDish)
-
-	d.GET("/:dishId/ingredients", ic.GetIngredientsByDishId)
-
-	/*
-		i := e.Group("/ingredients")
-		i.Use(echojwt.WithConfig(echojwt.Config{
-			SigningKey:  []byte(os.Getenv("SECRET")),
-			TokenLookup: "cookie:token",
-		}))
-
-		i.GET("/:dishId", ic.GetIngredientsByDishId)
-	*/
+	dishes := e.Group("/dishes")
+	dishes.Use(echojwt.WithConfig(echojwt.Config{
+		SigningKey:  []byte(os.Getenv("SECRET")),
+		TokenLookup: "cookie:token",
+	}))
+	dishes.GET("", dc.GetAllDishes)
 
 	return e
 }
