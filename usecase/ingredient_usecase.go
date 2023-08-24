@@ -3,6 +3,7 @@ package usecase
 import (
 	"ingredients-list/model"
 	"ingredients-list/repository"
+	"ingredients-list/validator"
 )
 
 type IIngredientUsecase interface {
@@ -16,10 +17,11 @@ type IIngredientUsecase interface {
 
 type ingredientUsecase struct {
 	ir repository.IIngredientRepository
+	iv validator.IIngredientValidator
 }
 
-func NewIngredientUsecase(ir repository.IIngredientRepository) IIngredientUsecase {
-	return &ingredientUsecase{ir}
+func NewIngredientUsecase(ir repository.IIngredientRepository, iv validator.IIngredientValidator) IIngredientUsecase {
+	return &ingredientUsecase{ir, iv}
 }
 
 func (iu *ingredientUsecase) GetIngredientsByDishId(userId, dishId uint) ([]model.IngredientResponse, error) {
@@ -43,6 +45,10 @@ func (iu *ingredientUsecase) GetIngredientsByDishId(userId, dishId uint) ([]mode
 }
 
 func (iu *ingredientUsecase) CreateIngredient(ingredient model.Ingredient) (model.IngredientResponse, error) {
+	if err := iu.iv.IngredientValidate(ingredient); err != nil {
+		return model.IngredientResponse{}, err
+	}
+
 	if err := iu.ir.CreateIngredient(&ingredient); err != nil {
 		return model.IngredientResponse{}, err
 	}
@@ -50,6 +56,7 @@ func (iu *ingredientUsecase) CreateIngredient(ingredient model.Ingredient) (mode
 	resIngredient := model.IngredientResponse{
 		ID:             ingredient.ID,
 		Ingredientname: ingredient.Ingredientname,
+		Stock:          ingredient.Stock,
 		CreatedAt:      ingredient.CreatedAt,
 		UpdatedAt:      ingredient.UpdatedAt,
 	}

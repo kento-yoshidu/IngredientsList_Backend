@@ -14,7 +14,7 @@ func main() {
 
 	userValidator := validator.NewUserValidator()
 	dishValidator := validator.NewDishValidator()
-	// ingredientValidator := validator.NewIngredientValidator()
+	ingredientValidator := validator.NewIngredientValidator()
 
 	userRepository := repository.NewUserRepository(db)
 	dishRepository := repository.NewDishRepository(db)
@@ -22,7 +22,7 @@ func main() {
 
 	userUsecase := usecase.NewUserUsecase(userRepository, userValidator)
 	dishUsecase := usecase.NewDishUsecase(dishRepository, dishValidator)
-	ingredientUsecase := usecase.NewIngredientUsecase(ingredientRepository)
+	ingredientUsecase := usecase.NewIngredientUsecase(ingredientRepository, ingredientValidator)
 
 	userController := controller.NewUserController(userUsecase)
 	dishController := controller.NewDishController(dishUsecase)
