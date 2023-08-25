@@ -35,7 +35,8 @@ func (iu *ingredientUsecase) GetIngredientsByDishId(userId, dishId uint) ([]mode
 		i := model.IngredientResponse{
 			ID:             v.ID,
 			Ingredientname: v.Ingredientname,
-			Stock:          v.Stock,
+			Shouldbuy:      v.Shouldbuy,
+			Dishname:       v.Dish.Dishname,
 		}
 		resIngredients = append(resIngredients, i)
 	}
@@ -56,9 +57,7 @@ func (iu *ingredientUsecase) CreateIngredient(ingredient model.Ingredient) (mode
 	resIngredient := model.IngredientResponse{
 		ID:             ingredient.ID,
 		Ingredientname: ingredient.Ingredientname,
-		Stock:          ingredient.Stock,
-		CreatedAt:      ingredient.CreatedAt,
-		UpdatedAt:      ingredient.UpdatedAt,
+		Shouldbuy:      ingredient.Shouldbuy,
 	}
 
 	return resIngredient, nil
