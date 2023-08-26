@@ -53,5 +53,12 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 	}))
 	dishes.GET("", dc.GetAllDishes)
 
+	i := e.Group("/ingredient")
+	i.Use(echojwt.WithConfig(echojwt.Config{
+		SigningKey:  []byte(os.Getenv("SECRET")),
+		TokenLookup: "cookie:token",
+	}))
+	i.PUT("/:ingredientId", ic.UpdateIngredient)
+
 	return e
 }

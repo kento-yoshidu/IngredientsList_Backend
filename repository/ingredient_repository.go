@@ -11,7 +11,7 @@ import (
 type IIngredientRepository interface {
 	GetIngredientsByDishId(ingredient *[]model.Ingredient, userId, dishId uint) error
 	CreateIngredient(ingredient *model.Ingredient) error
-	UpdateIngredient(ingredient *model.Ingredient, dishId, ingredientId uint) error
+	UpdateIngredient(ingredient *model.Ingredient, ingredientId uint) error
 	DeleteIngredient(dishId, ingredientId uint) error
 }
 
@@ -39,8 +39,8 @@ func (ir *ingredientRepository) CreateIngredient(ingredient *model.Ingredient) e
 	return nil
 }
 
-func (ir *ingredientRepository) UpdateIngredient(ingredient *model.Ingredient, dishId, ingredientId uint) error {
-	result := ir.db.Model(ingredient).Clauses(clause.Returning{}).Where("id=? AND dish_id=?", ingredientId, dishId).Update("ingredientname", ingredient.Ingredientname)
+func (ir *ingredientRepository) UpdateIngredient(ingredient *model.Ingredient, ingredientId uint) error {
+	result := ir.db.Model(ingredient).Clauses(clause.Returning{}).Where("id=?", ingredientId).Update("ingredientname", ingredient.Ingredientname)
 
 	if result.Error != nil {
 		return result.Error

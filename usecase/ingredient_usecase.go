@@ -9,8 +9,8 @@ import (
 type IIngredientUsecase interface {
 	GetIngredientsByDishId(userId, dishId uint) ([]model.IngredientResponse, error)
 	CreateIngredient(ingredient model.Ingredient) (model.IngredientResponse, error)
+	UpdateIngredient(ingredient model.Ingredient, ingredientId uint) (model.IngredientResponse, error)
 	/*
-		UpdateIngredient(dishId, ingredientId uint) (model.IngredientResponse, error)
 		DeleteIngredient(dishId, ingredientId uint) error
 	*/
 }
@@ -51,6 +51,20 @@ func (iu *ingredientUsecase) CreateIngredient(ingredient model.Ingredient) (mode
 	}
 
 	if err := iu.ir.CreateIngredient(&ingredient); err != nil {
+		return model.IngredientResponse{}, err
+	}
+
+	resIngredient := model.IngredientResponse{
+		ID:             ingredient.ID,
+		Ingredientname: ingredient.Ingredientname,
+		Shouldbuy:      ingredient.Shouldbuy,
+	}
+
+	return resIngredient, nil
+}
+
+func (iu *ingredientUsecase) UpdateIngredient(ingredient model.Ingredient, ingredientId uint) (model.IngredientResponse, error) {
+	if err := iu.ir.UpdateIngredient(&ingredient, ingredientId); err != nil {
 		return model.IngredientResponse{}, err
 	}
 
