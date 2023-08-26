@@ -1,13 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"ingredients-list/controller"
 	"ingredients-list/db"
 	"ingredients-list/repository"
 	"ingredients-list/router"
 	"ingredients-list/usecase"
 	"ingredients-list/validator"
+
+	"github.com/labstack/echo"
 )
+
+func bodyDumpHandler(c echo.Context, reqBody, resBody []byte) {
+	fmt.Printf("Request Body: %v\n", string(reqBody))
+	fmt.Printf("Response Body: %v\n", string(resBody))
+}
 
 func main() {
 	db := db.NewDB()
