@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"ingredients-list/controller"
 	"net/http"
 	"os"
@@ -10,8 +11,15 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+func bodyDumpHandler(c echo.Context, reqBody, resBody []byte) {
+	fmt.Printf("Request Body: %v\n", string(reqBody))
+	fmt.Printf("Response Body: %v\n", string(resBody))
+}
+
 func NewRouter(uc controller.IUserController, dc controller.IDishController, ic controller.IIngredientController) *echo.Echo {
 	e := echo.New()
+
+	e.Use(middleware.BodyDump(bodyDumpHandler))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000", os.Getenv("FE_URL")},
@@ -52,6 +60,13 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 		TokenLookup: "cookie:token",
 	}))
 	dishes.GET("", dc.GetAllDishes)
+
+	i := e.Group("/ingredient")
+	i.Use(echojwt.WithConfig(echojwt.Config{
+		SigningKey:  []byte(os.Getenv("SECRET")),
+		TokenLookup: "cookie:token",
+	}))
+	i.PUT("/:ingredientId", ic.UpdateIngredient)
 
 	return e
 }
