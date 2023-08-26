@@ -14,6 +14,7 @@ type IDishController interface {
 	GetAllDishes(c echo.Context) error
 	GetDishById(c echo.Context) error
 	CreateDish(c echo.Context) error
+	UpdateDish(c echo.Context) error
 	DeleteDish(c echo.Context) error
 }
 
@@ -66,6 +67,27 @@ func (dc *dishController) CreateDish(c echo.Context) error {
 	dish.UserId = uint(userId.(float64))
 
 	dishRes, err := dc.du.CreateDish(dish)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, dishRes)
+}
+
+func (dc *dishController) UpdateDish(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userId := claims["user_id"]
+
+	id := c.Param("dishId")
+	dishId, _ := strconv.Atoi(id)
+
+	dish := model.Dish{}
+	if err := c.Bind(&dish); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	dishRes, err := dc.du.UpdateDish(dish, uint(userId.(float64)), uint(dishId))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
