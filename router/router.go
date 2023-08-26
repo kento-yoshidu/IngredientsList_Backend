@@ -40,6 +40,7 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 	}))
 	dish.POST("", dc.CreateDish)
 	dish.GET("/:dishId", dc.GetDishById)
+	dish.PUT("/:dishId", dc.UpdateDish)
 	dish.DELETE("/:dishId", dc.DeleteDish)
 
 	dish.GET("/:dishId/ingredients", ic.GetIngredientsByDishId)

@@ -10,6 +10,7 @@ type IDishUsecase interface {
 	GetAllDishes(userId uint) ([]model.DishResponse, error)
 	GetDishById(userId, dishId uint) (model.DishResponse, error)
 	CreateDish(dish model.Dish) (model.DishResponse, error)
+	UpdateDish(dish model.Dish, userId, dishId uint) (model.DishResponse, error)
 	DeleteDish(userId, dishId uint) error
 }
 
@@ -71,6 +72,19 @@ func (du *dishUsecase) CreateDish(dish model.Dish) (model.DishResponse, error) {
 		Dishname:  dish.Dishname,
 		CreatedAt: dish.CreatedAt,
 		UpdatedAt: dish.UpdatedAt,
+	}
+
+	return resDish, nil
+}
+
+func (du *dishUsecase) UpdateDish(dish model.Dish, userId, dishId uint) (model.DishResponse, error) {
+	if err := du.dr.UpdateDish(&dish, userId, dishId); err != nil {
+		return model.DishResponse{}, err
+	}
+
+	resDish := model.DishResponse{
+		ID:       dish.ID,
+		Dishname: dish.Dishname,
 	}
 
 	return resDish, nil
