@@ -14,6 +14,7 @@ type IIngredientController interface {
 	GetIngredientsByDishId(c echo.Context) error
 	CreateIngredient(c echo.Context) error
 	UpdateIngredient(c echo.Context) error
+	DeleteIngredient(c echo.Context) error
 }
 
 type ingredientController struct {
@@ -78,4 +79,16 @@ func (ic *ingredientController) UpdateIngredient(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, ingredientRes)
+}
+
+func (ic *ingredientController) DeleteIngredient(c echo.Context) error {
+	id := c.Param("ingredientId")
+	ingredientId, _ := strconv.Atoi(id)
+
+	err := ic.iu.DeleteIngredient(uint(ingredientId))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }

@@ -67,6 +67,7 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 		TokenLookup: "cookie:token",
 	}))
 	i.PUT("/:ingredientId", ic.UpdateIngredient)
+	i.DELETE("/:ingredientId", ic.DeleteIngredient)
 
 	return e
 }
