@@ -53,6 +53,7 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 
 	dish.GET("/:dishId/ingredients", ic.GetIngredientsByDishId)
 	dish.POST("/:dishId/ingredients", ic.CreateIngredient)
+	dish.DELETE("/:dishId/ingredient/:ingredientId", ic.DeleteIngredient)
 
 	dishes := e.Group("/dishes")
 	dishes.Use(echojwt.WithConfig(echojwt.Config{
@@ -67,7 +68,6 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 		TokenLookup: "cookie:token",
 	}))
 	i.PUT("/:ingredientId", ic.UpdateIngredient)
-	i.DELETE("/:ingredientId", ic.DeleteIngredient)
 
 	return e
 }

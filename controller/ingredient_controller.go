@@ -82,10 +82,13 @@ func (ic *ingredientController) UpdateIngredient(c echo.Context) error {
 }
 
 func (ic *ingredientController) DeleteIngredient(c echo.Context) error {
-	id := c.Param("ingredientId")
-	ingredientId, _ := strconv.Atoi(id)
+	id := c.Param("dishId")
+	dishId, _ := strconv.Atoi(id)
 
-	err := ic.iu.DeleteIngredient(uint(ingredientId))
+	ingreid := c.Param("ingredientId")
+	ingredientId, _ := strconv.Atoi(ingreid)
+
+	err := ic.iu.DeleteIngredient(uint(dishId), uint(ingredientId))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
