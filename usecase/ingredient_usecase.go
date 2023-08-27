@@ -10,9 +10,7 @@ type IIngredientUsecase interface {
 	GetIngredientsByDishId(userId, dishId uint) ([]model.IngredientResponse, error)
 	CreateIngredient(ingredient model.Ingredient) (model.IngredientResponse, error)
 	UpdateIngredient(ingredient model.Ingredient, ingredientId uint) (model.IngredientResponse, error)
-	/*
-		DeleteIngredient(dishId, ingredientId uint) error
-	*/
+	DeleteIngredient(ingredientId uint) error
 }
 
 type ingredientUsecase struct {
@@ -75,4 +73,12 @@ func (iu *ingredientUsecase) UpdateIngredient(ingredient model.Ingredient, ingre
 	}
 
 	return resIngredient, nil
+}
+
+func (iu *ingredientUsecase) DeleteIngredient(ingredientId uint) error {
+	if err := iu.ir.DeleteIngredient(ingredientId); err != nil {
+		return err
+	}
+
+	return nil
 }
