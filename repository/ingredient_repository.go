@@ -12,7 +12,7 @@ type IIngredientRepository interface {
 	GetIngredientsByDishId(ingredient *[]model.Ingredient, userId, dishId uint) error
 	CreateIngredient(ingredient *model.Ingredient) error
 	UpdateIngredient(ingredient *model.Ingredient, ingredientId uint) error
-	DeleteIngredient(ingredientId uint) error
+	DeleteIngredient(dishId, ingredientId uint) error
 }
 
 type ingredientRepository struct {
@@ -53,10 +53,8 @@ func (ir *ingredientRepository) UpdateIngredient(ingredient *model.Ingredient, i
 	return nil
 }
 
-func (ir *ingredientRepository) DeleteIngredient(ingredientId uint) error {
-	fmt.Printf("id=%v", ingredientId)
-
-	result := ir.db.Joins("User").Joins("Dish").Where("id=?", ingredientId).Delete(&model.Ingredient{})
+func (ir *ingredientRepository) DeleteIngredient(dishId, ingredientId uint) error {
+	result := ir.db.Debug().Joins("Dish").Where("id=? AND dish_id=?", ingredientId, dishId).Delete(&model.Ingredient{})
 
 	if result.Error != nil {
 		return result.Error
