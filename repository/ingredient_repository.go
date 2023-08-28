@@ -5,7 +5,6 @@ import (
 	"ingredients-list/model"
 
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type IIngredientRepository interface {
@@ -40,7 +39,7 @@ func (ir *ingredientRepository) CreateIngredient(ingredient *model.Ingredient) e
 }
 
 func (ir *ingredientRepository) UpdateIngredient(ingredient *model.Ingredient, ingredientId uint) error {
-	result := ir.db.Model(ingredient).Clauses(clause.Returning{}).Where("id=?", ingredientId).Update("ingredientname", ingredient.Ingredientname)
+	result := ir.db.Model(ingredient).Where("id=?", ingredientId).Updates(model.Ingredient{ID: ingredient.ID, Ingredientname: ingredient.Ingredientname, Shouldbuy: ingredient.Shouldbuy})
 
 	if result.Error != nil {
 		return result.Error

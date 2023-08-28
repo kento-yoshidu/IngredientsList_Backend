@@ -59,11 +59,6 @@ func (ic *ingredientController) CreateIngredient(c echo.Context) error {
 	return c.JSON(http.StatusOK, ingredientsRes)
 }
 
-type Req struct {
-	ingredientname string `query:"ingredientname"`
-	dishId         string `query:"dishid"`
-}
-
 func (ic *ingredientController) UpdateIngredient(c echo.Context) error {
 	id := c.Param("ingredientId")
 	ingredientId, _ := strconv.Atoi(id)
