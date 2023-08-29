@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"fmt"
 	"ingredients-list/model"
 	"ingredients-list/repository"
 	"ingredients-list/validator"
@@ -63,7 +62,6 @@ func (iu *ingredientUsecase) CreateIngredient(ingredient model.Ingredient) (mode
 }
 
 func (iu *ingredientUsecase) UpdateIngredient(ingredient model.Ingredient, ingredientId uint) (model.IngredientResponse, error) {
-	fmt.Printf("%v", ingredient)
 	if err := iu.ir.UpdateIngredient(&ingredient, ingredientId); err != nil {
 		return model.IngredientResponse{}, err
 	}
