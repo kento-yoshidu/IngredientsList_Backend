@@ -23,7 +23,7 @@ func NewIngredientRepository(db *gorm.DB) IIngredientRepository {
 }
 
 func (ir *ingredientRepository) GetIngredientsByDishId(ingredient *[]model.Ingredient, userId, dishId uint) error {
-	if err := ir.db.Joins("Dish").Where("user_id=? AND dish_id=?", userId, dishId).Find(ingredient).Error; err != nil {
+	if err := ir.db.Order("created_at").Joins("Dish").Where("user_id=? AND dish_id=?", userId, dishId).Find(ingredient).Error; err != nil {
 		return err
 	}
 
