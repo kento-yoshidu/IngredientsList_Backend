@@ -39,7 +39,7 @@ func (ir *ingredientRepository) CreateIngredient(ingredient *model.Ingredient) e
 }
 
 func (ir *ingredientRepository) UpdateIngredient(ingredient *model.Ingredient, ingredientId uint) error {
-	result := ir.db.Model(ingredient).Where("id=?", ingredientId).Updates(model.Ingredient{ID: ingredient.ID, Ingredientname: ingredient.Ingredientname, Shouldbuy: ingredient.Shouldbuy})
+	result := ir.db.Model(ingredient).Select("ingredientname", "shouldbuy").Where("id=?", ingredientId).Updates(model.Ingredient{ID: ingredientId, Ingredientname: ingredient.Ingredientname, Shouldbuy: ingredient.Shouldbuy})
 
 	if result.Error != nil {
 		return result.Error
