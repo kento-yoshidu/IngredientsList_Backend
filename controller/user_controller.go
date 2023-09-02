@@ -55,8 +55,8 @@ func (uc *userController) LogIn(c echo.Context) error {
 	cookie.Value = tokenString
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	cookie.Path = "/"
-	cookie.Domain = os.Getenv("API_DOMAIN", "http://localhost:3000")
-	cookie.Secure = true
+	cookie.Domain = os.Getenv("API_DOMAIN")
+	// cookie.Secure = true
 	cookie.HttpOnly = true
 	cookie.SameSite = http.SameSiteNoneMode
 	c.SetCookie(cookie)
@@ -70,8 +70,8 @@ func (uc *userController) LogOut(c echo.Context) error {
 	cookie.Value = ""
 	cookie.Expires = time.Now()
 	cookie.Path = "/"
-	cookie.Domain = os.Getenv("API_DOMAIN", "http://localhost:3000")
-	cookie.Secure = true
+	cookie.Domain = os.Getenv("API_DOMAIN")
+	// cookie.Secure = true
 	cookie.HttpOnly = true
 	cookie.SameSite = http.SameSiteNoneMode
 	c.SetCookie(cookie)
