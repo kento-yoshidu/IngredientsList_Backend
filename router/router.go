@@ -3,6 +3,7 @@ package router
 import (
 	"fmt"
 	"ingredients-list/controller"
+	"net/http"
 	"os"
 
 	echojwt "github.com/labstack/echo-jwt/v4"
@@ -31,7 +32,7 @@ func NewRouter(uc controller.IUserController, dc controller.IDishController, ic 
 		CookiePath:     "/",
 		CookieDomain:   os.Getenv("API_DOMAIN"),
 		CookieHTTPOnly: true,
-		// CookieSameSite: http.SameSiteNoneMode,
+		CookieSameSite: http.SameSiteNoneMode,
 		// CookieMaxAge:   60,
 	}))
 
