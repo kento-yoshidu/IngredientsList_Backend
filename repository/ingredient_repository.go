@@ -12,6 +12,7 @@ type IIngredientRepository interface {
 	CreateIngredient(ingredient *model.Ingredient) error
 	UpdateIngredient(ingredient *model.Ingredient, ingredientId uint) error
 	DeleteIngredient(dishId, ingredientId uint) error
+	GetShouldBuyIngredients(ingredient *[]model.Ingredient, userId uint) error
 }
 
 type ingredientRepository struct {
@@ -61,6 +62,14 @@ func (ir *ingredientRepository) DeleteIngredient(dishId, ingredientId uint) erro
 
 	if result.RowsAffected < 1 {
 		return fmt.Errorf("削除するべきレコードがありませんでした")
+	}
+
+	return nil
+}
+
+func (ir *ingredientRepository) GetShouldBuyIngredients(ingredient *[]model.Ingredient, userId uint) error {
+	if err := ir.db.Table("ingredients").Joins("JOIN dishes on ingredients.dish_id = dishes.id").Joins("JOIN users on dishes.user_id = users.id").Where("user_id=? AND shouldbuy = true", userId).Find(ingredient).Error; err != nil {
+		return err
 	}
 
 	return nil

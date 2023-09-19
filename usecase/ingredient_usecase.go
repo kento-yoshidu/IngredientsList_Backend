@@ -11,6 +11,7 @@ type IIngredientUsecase interface {
 	CreateIngredient(ingredient model.Ingredient) (model.IngredientResponse, error)
 	UpdateIngredient(ingredient model.Ingredient, ingredientId uint) (model.IngredientResponse, error)
 	DeleteIngredient(dishId, ingredientId uint) error
+	GetShouldBuyIngredients(userId uint) ([]model.IngredientResponse, error)
 }
 
 type ingredientUsecase struct {
@@ -81,4 +82,24 @@ func (iu *ingredientUsecase) DeleteIngredient(dishId, ingredientId uint) error {
 	}
 
 	return nil
+}
+
+func (iu *ingredientUsecase) GetShouldBuyIngredients(userId uint) ([]model.IngredientResponse, error) {
+	ingredients := []model.Ingredient{}
+	if err := iu.ir.GetShouldBuyIngredients(&ingredients, userId); err != nil {
+		return nil, err
+	}
+
+	resIngredients := []model.IngredientResponse{}
+	for _, v := range ingredients {
+		i := model.IngredientResponse{
+			ID:             v.ID,
+			Ingredientname: v.Ingredientname,
+			Shouldbuy:      v.Shouldbuy,
+			Dishname:       v.Dish.Dishname,
+		}
+		resIngredients = append(resIngredients, i)
+	}
+
+	return resIngredients, nil
 }
