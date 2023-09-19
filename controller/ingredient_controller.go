@@ -15,6 +15,7 @@ type IIngredientController interface {
 	CreateIngredient(c echo.Context) error
 	UpdateIngredient(c echo.Context) error
 	DeleteIngredient(c echo.Context) error
+	GetShouldBuyIngredients(c echo.Context) error
 }
 
 type ingredientController struct {
@@ -89,4 +90,17 @@ func (ic *ingredientController) DeleteIngredient(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusNoContent)
+}
+
+func (ic *ingredientController) GetShouldBuyIngredients(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userId := claims["user_id"]
+
+	ingredientsRes, err := ic.iu.GetShouldBuyIngredients(uint(userId.(float64)))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, ingredientsRes)
 }
