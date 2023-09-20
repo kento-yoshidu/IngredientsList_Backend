@@ -68,7 +68,7 @@ func (ir *ingredientRepository) DeleteIngredient(dishId, ingredientId uint) erro
 }
 
 func (ir *ingredientRepository) GetShouldBuyIngredients(shouldbuy *[]model.Shouldbuy, userId uint) error {
-	if err := ir.db.Table("ingredients").Select("ingredients.ingredientname", "dishes.dishname").Joins("JOIN dishes on ingredients.dish_id = dishes.id").Joins("JOIN users on dishes.user_id = users.id").Where("user_id=? AND shouldbuy = true", userId).Find(shouldbuy).Error; err != nil {
+	if err := ir.db.Table("ingredients").Select("ingredients.id", "ingredients.ingredientname", "ingredients.shouldbuy", "dishes.dishname").Joins("JOIN dishes on ingredients.dish_id = dishes.id").Joins("JOIN users on dishes.user_id = users.id").Where("user_id=? AND shouldbuy = true", userId).Find(shouldbuy).Error; err != nil {
 		return err
 	}
 
