@@ -95,6 +95,7 @@ func (iu *ingredientUsecase) GetShouldBuyIngredients(userId uint) ([]model.Shoul
 		i := model.ShouldbuyResponse{
 			ID:             v.ID,
 			Ingredientname: v.Ingredientname,
+			Shouldbuy:      v.Shouldbuy,
 			Dishname:       v.Dishname,
 		}
 		resShouldbuy = append(resShouldbuy, i)
